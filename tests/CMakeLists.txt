@@ -168,3 +168,43 @@ ncnn_add_layer_test(Tile)
 ncnn_add_layer_test(UnaryOp)
 ncnn_add_layer_test(Unfold)
 ncnn_add_layer_test(Yolov3DetectionOutput)
+
+if(NCNN_BUILD_GOOGLE_BENCHMARK)
+    # Build Google Benchmark
+    set(BENCHMARK_ENABLE_TESTING OFF)
+    set(BENCHMARK_ENABLE_GTEST_TESTS OFF)
+    set(BENCHMARK_ENABLE_INSTALL OFF)
+    add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../benchmark/googlebenchmark ${CMAKE_CURRENT_BINARY_DIR}/googlebenchmark)
+
+    macro(ncnn_add_benchmark name)
+        add_executable(bench_${name} bench_${name}.cpp)
+        target_link_libraries(bench_${name} PRIVATE benchmark::benchmark ncnntestutil ncnn)
+
+        # add benchmark to a virtual project group
+        set_property(TARGET bench_${name} PROPERTY FOLDER "benchmarks")
+    endmacro()
+
+    ncnn_add_benchmark(batchnorm)
+    ncnn_add_benchmark(bias)
+    ncnn_add_benchmark(flatten)
+    ncnn_add_benchmark(gelu)
+    ncnn_add_benchmark(slice)
+    ncnn_add_benchmark(softmax)
+    ncnn_add_benchmark(convolution)
+    ncnn_add_benchmark(convolutiondepthwise)
+    ncnn_add_benchmark(deconvolutiondepthwise)
+    ncnn_add_benchmark(deformableconv2d)
+    ncnn_add_benchmark(gridsample)
+    ncnn_add_benchmark(groupnorm)
+    ncnn_add_benchmark(innerproduct)
+    ncnn_add_benchmark(layernorm)
+    ncnn_add_benchmark(lrn)
+    ncnn_add_benchmark(lstm)
+    ncnn_add_benchmark(matmul)
+    ncnn_add_benchmark(pooling)
+    ncnn_add_benchmark(rmsnorm)
+    ncnn_add_benchmark(roialign)
+    ncnn_add_benchmark(sdpa)
+
+endif()
+
